@@ -1,4 +1,4 @@
-Attribute VB_Name = "MailCreation"
+Attribute VB_Name = "AP_MailCreation"
 Sub Mail_Selection_Range_Outlook_Body()
 Attribute Mail_Selection_Range_Outlook_Body.VB_ProcData.VB_Invoke_Func = "S\n14"
 
