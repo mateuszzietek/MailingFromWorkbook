@@ -7,7 +7,7 @@ Dim OutApp As Object
 Dim OutMail As Object
 
 Dim MessageText As String
-MessageText = "Hi Team, <br> <br> Please process attached invoice. Please inform us when the invoice <b>gets booked</b> on Your side.<br> <br>"
+MessageText = "Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets booked on Your side.</b></u><br> <br>"
 
 Dim BU As String
 BU = ActiveSheet.Range("I2").Value
