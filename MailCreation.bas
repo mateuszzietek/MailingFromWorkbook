@@ -15,6 +15,18 @@ BU = ActiveSheet.Range("I2").Value
 Dim POAttachment As String
 POAttachment = ActiveSheet.Range("B2").Value
 
+'Sygnatura
+Dim SigString As String
+Dim Signature As String
+    
+SigString = Environ("appdata") & "\Microsoft\Signatures\EUMarketing.htm"
+
+    If Dir(SigString) <> "" Then
+        Signature = GetBoiler(SigString)
+    Else
+        Signature = ""
+    End If
+
 'Skopiowanie danych do arkusza temp
 Sheets("Sheet1").Range("A1:K300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
 
@@ -51,7 +63,7 @@ With OutMail
     .CC = "EUMarketingP2P@Staples-Solutions.com; Przemyslaw.Luczak@Staples-Solutions.com"
     .BCC = ""
     .Subject = "AP Marketing Invoice " + BU
-    .HTMLBody = MessageText + RangetoHTML(rng)
+    .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
     .SentOnBehalfOfName = "EUMarketingP2P@Staples-Solutions.com"
     '.Attachments.Add ("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + POAttachment + ".pdf")
     
@@ -112,7 +124,7 @@ Function RangetoHTML(rng As Range)
     'Read all data from the htm file into RangetoHTML
     Set fso = CreateObject("Scripting.FileSystemObject")
     Set ts = fso.GetFile(TempFile).OpenAsTextStream(1, -2)
-    RangetoHTML = ts.ReadAll
+    RangetoHTML = ts.readall
     ts.Close
     RangetoHTML = Replace(RangetoHTML, "align=center x:publishsource=", _
                           "align=left x:publishsource=")
@@ -126,6 +138,19 @@ Function RangetoHTML(rng As Range)
     Set ts = Nothing
     Set fso = Nothing
     Set TempWB = Nothing
+    
+End Function
+
+
+
+Function GetBoiler(ByVal sFile As String) As String
+'Dick Kusleika
+    Dim fso As Object
+    Dim ts As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set ts = fso.GetFile(sFile).OpenAsTextStream(1, -2)
+    GetBoiler = ts.readall
+    ts.Close
 End Function
 
 
