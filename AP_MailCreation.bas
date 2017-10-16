@@ -15,12 +15,136 @@ Sheets("AP").Range("A1:K300").SpecialCells(xlCellTypeConstants).Copy Destination
 
 Sheets("temp").Range("A1:K300").Columns.AutoFit
 
-
 Dim BU As String
 BU = Sheets("temp").Range("I2").Value
 
 Dim POAttachment As String
 POAttachment = Sheets("temp").Range("B2").Value
+
+
+'Przypisanie maila do BU
+Dim BUmail As String
+
+Select Case BU
+    
+        Case Is = "AT - SE Advantage Austria"
+                    BUmail = Sheets("apc").Range("C26").Value
+
+        Case Is = "AT - SE SBD Austria (not in use)"
+                    BUmail = Sheets("apc").Range("C26").Value
+        
+        Case Is = "AT - SE SBD Pressel (Austria)"
+                    BUmail = Sheets("apc").Range("C24").Value
+        
+        Case Is = "BE - SE Advantage Belgium"
+                    BUmail = Sheets("apc").Range("C38").Value
+        
+        Case Is = "BE - SE Bernard Belgium"
+                    BUmail = Sheets("apc").Range("C37").Value
+        
+        Case Is = "DE - SE Advantage Germany"
+                    BUmail = Sheets("apc").Range("C18").Value
+        
+        Case Is = "DE - SE Retail Germany"
+                    BUmail = Sheets("apc").Range("C17").Value
+        
+        Case Is = "DE - SE SBD Germany Total"
+                    BUmail = Sheets("apc").Range("C19").Value
+        
+        Case Is = "DE - SE SBD Pressel (Germany)"
+                    BUmail = Sheets("apc").Range("C23").Value
+        
+        Case Is = "DK - SE Advantage Denmark"
+                    BUmail = Sheets("apc").Range("C5").Value
+        
+        Case Is = "DK - SE SBD Denmark"
+                    BUmail = Sheets("apc").Range("C5").Value
+        
+        Case Is = "ES - SE Advantage Spain"
+                    BUmail = Sheets("apc").Range("C28").Value
+        
+        Case Is = "ES - SE SBD Spain"
+                    BUmail = Sheets("apc").Range("C28").Value
+        
+'        Case Is = "EU - Staples Europe BV"
+'                    BUmail = Sheets("apc").Range("C00").Value
+        
+'        Case Is = "EU - Staples Europe Import BV"
+'                    BUmail = Sheets("apc").Range("C00").Value
+        
+'        Case Is = "EU - Staples International BV"
+'                    BUmail = Sheets("apc").Range("C00").Value
+        
+        Case Is = "FI - SE Advantage Finland"
+                    BUmail = Sheets("apc").Range("C34").Value
+        
+        Case Is = "FI - SE Holding Finland"
+                    BUmail = Sheets("apc").Range("C34").Value
+        
+        Case Is = "FR - SE Advantage France"
+                    BUmail = Sheets("apc").Range("C13").Value
+        
+        Case Is = "FR - SE Bernard France"
+                    BUmail = Sheets("apc").Range("C13").Value
+        
+        Case Is = "FR - SE SBD France"
+                    BUmail = Sheets("apc").Range("C13").Value
+        
+        Case Is = "IT - SE Advantage Italy"
+                    BUmail = Sheets("apc").Range("C30").Value
+        
+        Case Is = "IT - SE SBD Italy Total"
+                    BUmail = Sheets("apc").Range("C30").Value
+        
+        Case Is = "NL - SE Advantage Netherlands Total"
+                    BUmail = Sheets("apc").Range("C40").Value
+        
+        Case Is = "NL - SE Retail Netherlands"
+                    BUmail = Sheets("apc").Range("C40").Value
+        
+        Case Is = "NL - SE SBD Netherlands"
+                    BUmail = Sheets("apc").Range("C40").Value
+        
+        Case Is = "NO - EMO Norway"
+                    BUmail = Sheets("apc").Range("C3").Value
+        
+        Case Is = "NO - SE Advantage Norway"
+                    BUmail = Sheets("apc").Range("C3").Value
+        
+        Case Is = "NO - SE Retail Norway"
+                    BUmail = Sheets("apc").Range("C3").Value
+        
+        Case Is = "NO - SE SBD Norway"
+                    BUmail = Sheets("apc").Range("C3").Value
+        
+        Case Is = "PL - SE Advantage Poland"
+                    BUmail = Sheets("apc").Range("C42").Value
+        
+        Case Is = "PT - SE Retail Portugal"
+                    BUmail = "DO NOT SEND THIS EMAIL!"
+        
+        Case Is = "PT - SE SBD Portugal"
+                    BUmail = "DO NOT SEND THIS EMAIL!"
+        
+        Case Is = "SE - EMO Sweden"
+                    BUmail = Sheets("apc").Range("C4").Value
+        
+        Case Is = "SE - SE Advantage Sweden"
+                    BUmail = Sheets("apc").Range("C4").Value
+            
+        Case Is = "SE - SE SBD Sweden"
+                    BUmail = Sheets("apc").Range("C4").Value
+        
+        Case Is = "UK - SE Retail UK (not in use)"
+                    BUmail = Sheets("apc").Range("C8").Value
+        
+        Case Is = "UK - Staples UK Adv Limited"
+                    BUmail = Sheets("apc").Range("C9").Value
+        
+        Case Is = "UK - Staples UK Online Limited"
+                    BUmail = Sheets("apc").Range("C10").Value
+
+End Select
 
 'Sygnatura
 Dim SigString As String
@@ -62,7 +186,7 @@ Set OutMail = OutApp.CreateItem(0)
 
 
 With OutMail
-    .To = ""
+    .To = BUmail
     .CC = "EUMarketingP2P@Staples-Solutions.com; Przemyslaw.Luczak@Staples-Solutions.com"
     .BCC = ""
     .Subject = "AP Marketing Invoice " + BU
