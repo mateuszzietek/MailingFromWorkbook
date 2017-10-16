@@ -9,11 +9,18 @@ Dim OutMail As Object
 Dim MessageText As String
 MessageText = "Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets booked on Your side.</b></u><br> <br>"
 
+
+'Skopiowanie danych do arkusza temp
+Sheets("AP").Range("A1:K300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
+
+Sheets("temp").Range("A1:K300").Columns.AutoFit
+
+
 Dim BU As String
-BU = ActiveSheet.Range("I2").Value
+BU = Sheets("temp").Range("I2").Value
 
 Dim POAttachment As String
-POAttachment = ActiveSheet.Range("B2").Value
+POAttachment = Sheets("temp").Range("B2").Value
 
 'Sygnatura
 Dim SigString As String
@@ -27,10 +34,6 @@ SigString = Environ("appdata") & "\Microsoft\Signatures\EUMarketing.htm"
         Signature = ""
     End If
 
-'Skopiowanie danych do arkusza temp
-Sheets("Sheet1").Range("A1:K300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
-
-Sheets("temp").Range("A1:K300").Columns.AutoFit
 
 'Czy wysylac pojedynczo?
 Set rng = Nothing

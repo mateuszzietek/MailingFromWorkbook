@@ -2,10 +2,21 @@ Attribute VB_Name = "AP_DataImport"
 Option Explicit
 
 Public Sub GetAP()
+Attribute GetAP.VB_ProcData.VB_Invoke_Func = "D\n14"
     Application.ScreenUpdating = False
     
+Dim ExternalFile As String
+Dim Answer As Integer
+
+Answer = MsgBox("Do you want to extract data for AP Upload?", vbYesNo)
+    If Answer = vbYes Then
+        ExternalFile = Application.GetOpenFilename(FileFilter:="Wszystkie pliki (*.*),*.*", Title:="INVOICE DATA")
+                                
+        Workbooks.Open ExternalFile
+    
 'CLEAR FILTERS
-Call ClearFilters
+If ActiveWorkbook.Worksheets("DataTables").FilterMode = True _
+    Then Worksheets("DataTables").ShowAllData
  
 'Utworzenie nowych arkuszy
 Sheets.Add(After:=Worksheets(Worksheets.Count)).Name = "AP UPLOAD"
@@ -34,7 +45,7 @@ For Each Cost In Worksheets("AP Upload").Range("K2:K100")
     Cost.Replace What:="1•", Replacement:="", SearchOrder:=xlByColumns
 Next Cost
 
-''oczyszczenie Type of SPend
+''oczyszczenie Type of Spend
 'Application.ActiveWorkbook.Worksheets("AP Upload").Columns("J").Replace _
 ' What:="1•", Replacement:=")", _
 ' SearchOrder:=xlByColumns
@@ -43,7 +54,8 @@ Next Cost
 Application.ActiveWorkbook.Worksheets("AP Upload").Columns("A:I").AutoFit
 
 'CLEAR FILTERS
-Call ClearFilters
+If ActiveWorkbook.Worksheets("DataTables").FilterMode = True _
+    Then Worksheets("DataTables").ShowAllData
 
 'GERMANY
 
@@ -71,8 +83,16 @@ Application.ActiveWorkbook.Worksheets("GERMANY").Columns("K").AutoFit
 
 
 'CLEAR FILTERS
-Call ClearFilters
+If ActiveWorkbook.Worksheets("DataTables").FilterMode = True _
+    Then Worksheets("DataTables").ShowAllData
+    
+Worksheets("AP Upload").Activate
 
+
+    Else
+        'Do nothing
+    End If
+    
 
 MsgBox ("Task completed!")
 
