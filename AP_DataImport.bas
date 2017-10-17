@@ -129,6 +129,8 @@ If ActiveWorkbook.Worksheets("DataTables").FilterMode = True _
 
 
 'Import to APFA
+On Error Resume Next
+
 Dim LastRowAP As String
 Dim LastRowFA As String
 
@@ -136,20 +138,17 @@ LastRowAP = Workbooks("APFA.xlsm").Worksheets("AP").Cells(Rows.Count, "A").End(x
 LastRowFA = Workbooks("APFA.xlsm").Worksheets("FA").Cells(Rows.Count, "A").End(xlUp).Row + 1
 
 'Wklej do AP
-Worksheets("AP UPLOAD").Range("A:K").SpecialCells(xlCellTypeConstants).Copy Destination:=Workbooks("APFA.xlsm").Worksheets("AP").Range("A" & LastRowAP & ":K" & LastRowAP)
+Worksheets("AP UPLOAD").Range("A:K").SpecialCells(xlCellTypeConstants).Copy
+Workbooks("APFA.xlsm").Worksheets("AP").Range("A" & LastRowAP & ":K" & LastRowAP).PasteSpecial xlPasteValues
 
 'Wklej do FA
-Worksheets("FA UPLOAD").Range("A:J").SpecialCells(xlCellTypeConstants).Copy Destination:=Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowFA & ":J" & LastRowFA)
-
-'Ujednolicanie formatowania w arkuszach
-
+Worksheets("FA UPLOAD").Range("A:J").SpecialCells(xlCellTypeConstants).Copy
+Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowAP & ":K" & LastRowAP).PasteSpecial xlPasteValues
 
 
-
-    Else
-        'Do nothing
-    End If
-
+On Error GoTo 0
+Else
+End If
 End Sub
 
 
