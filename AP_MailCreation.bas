@@ -187,7 +187,7 @@ Set OutMail = OutApp.CreateItem(0)
 
 With OutMail
     .To = BUmail
-    .CC = "EUMarketingP2P@Staples-Solutions.com; Przemyslaw.Luczak@Staples-Solutions.com"
+    .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
     .Subject = "AP Marketing Invoice " + BU
     .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
