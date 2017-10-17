@@ -7,7 +7,7 @@ Dim OutApp As Object
 Dim OutMail As Object
 
 Dim MessageText As String
-MessageText = "Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets booked on Your side.</b></u><br> <br>"
+MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
 
 'Skopiowanie danych do arkusza temp
@@ -209,7 +209,7 @@ Set OutMail = Nothing
 Set OutApp = Nothing
 
 'wyczyszczenie arkusza temp
-Sheets("temp").Range("A1:Q1000").Clear
+Sheets("temp").Range("A:Q").Delete
 
 End Sub
 
