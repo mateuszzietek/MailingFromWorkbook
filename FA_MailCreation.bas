@@ -59,7 +59,7 @@ Set OutMail = OutApp.CreateItem(0)
 
 
 With OutMail
-    .To = "APInvoiceNLHQstaples@Staples.com; supportoffice-ap@staples.com"
+    .to = "APInvoiceNLHQstaples@Staples.com; supportoffice-ap@staples.com"
     .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
     .Subject = "Processed Marketing Invoice " + TodayValue

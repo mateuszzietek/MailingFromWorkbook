@@ -18,9 +18,6 @@ Sheets("temp").Range("A1:K300").Columns.AutoFit
 Dim BU As String
 BU = Sheets("temp").Range("I2").Value
 
-Dim POAttachment As String
-POAttachment = Sheets("temp").Range("B2").Value
-
 
 'Przypisanie maila do BU
 Dim BUmail As String
@@ -185,15 +182,31 @@ Set OutApp = CreateObject("Outlook.Application")
 Set OutMail = OutApp.CreateItem(0)
 
 
+'ZALACZNIKI
+
+Dim InvoiceAttachment As String
+InvoiceAttachment = Sheets("temp").Range("C2").Value
+
+Dim InvoiceAtt2 As String
+InvoiceAttachment = Sheets("temp").Range("C3").Value
+
+Dim InvoiceAtt As String
+InvoiceAttachment = Sheets("temp").Range("C4").Value
+
+
+'On Error Resume Next
+
 With OutMail
-    .To = BUmail
+    .to = BUmail
     .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
     .Subject = "AP Marketing Invoice " + BU
     .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
     .SentOnBehalfOfName = "EUMarketingP2P@Staples-Solutions.com"
-    '.Attachments.Add ("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + POAttachment + ".pdf")
-    
+     
+    .Attachments.Add ("G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceAttachment + ".pdf")
+     
+
     ' In place of the following statement, you can use ".Display" to
     ' display the e-mail message.
     .Display
