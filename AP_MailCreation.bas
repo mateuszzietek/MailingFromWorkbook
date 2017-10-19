@@ -6,21 +6,28 @@ Dim rng As Range
 Dim OutApp As Object
 Dim OutMail As Object
 
-Dim MessageText As String
-MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
+Dim BU As String
+Dim BUmail As String
 
+Dim SigString As String
+Dim Signature As String
+
+Dim InvoiceNumber As String
+Dim InvoiceAttachment As String
+Dim n As Integer
+Dim rng2 As Range
+
+Dim MessageText As String
+
+'Tekst wiadomosci
+MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
 'Skopiowanie danych do arkusza temp
 Sheets("AP").Range("A1:K300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
-
 Sheets("temp").Range("A1:K300").Columns.AutoFit
 
-Dim BU As String
-BU = Sheets("temp").Range("I2").Value
-
-
 'Przypisanie maila do BU
-Dim BUmail As String
+BU = Sheets("temp").Range("I2").Value
 
 Select Case BU
     
@@ -62,15 +69,6 @@ Select Case BU
         
         Case Is = "ES - SE SBD Spain"
                     BUmail = Sheets("apc").Range("C28").Value
-        
-'        Case Is = "EU - Staples Europe BV"
-'                    BUmail = Sheets("apc").Range("C00").Value
-        
-'        Case Is = "EU - Staples Europe Import BV"
-'                    BUmail = Sheets("apc").Range("C00").Value
-        
-'        Case Is = "EU - Staples International BV"
-'                    BUmail = Sheets("apc").Range("C00").Value
         
         Case Is = "FI - SE Advantage Finland"
                     BUmail = Sheets("apc").Range("C34").Value
@@ -144,9 +142,6 @@ Select Case BU
 End Select
 
 'Sygnatura
-Dim SigString As String
-Dim Signature As String
-    
 SigString = Environ("appdata") & "\Microsoft\Signatures\EUMarketing.htm"
 
     If Dir(SigString) <> "" Then
@@ -182,35 +177,33 @@ Set OutApp = CreateObject("Outlook.Application")
 Set OutMail = OutApp.CreateItem(0)
 
 
-'ZALACZNIKI
-
-Dim InvoiceAttachment As String
-InvoiceAttachment = Sheets("temp").Range("C2").Value
-
-Dim InvoiceAtt2 As String
-InvoiceAttachment = Sheets("temp").Range("C3").Value
-
-Dim InvoiceAtt As String
-InvoiceAttachment = Sheets("temp").Range("C4").Value
-
-
-'On Error Resume Next
+On Error Resume Next
 
 With OutMail
-    .to = BUmail
+    .To = BUmail
     .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
     .Subject = "AP Marketing Invoice " + BU
     .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
     .SentOnBehalfOfName = "EUMarketingP2P@Staples-Solutions.com"
-     
-    .Attachments.Add ("G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceAttachment + ".pdf")
-     
-
-    ' In place of the following statement, you can use ".Display" to
-    ' display the e-mail message.
     .Display
 End With
+
+'ZALACZNIKI
+
+'InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + Sheets("temp").Range("C2").Value + ".pdf"
+
+Set rng2 = Sheets("temp").Range("C2:C30").SpecialCells(xlCellTypeConstants)
+
+For n = 2 To 30
+        InvoiceNumber = Sheets("temp").Cells(n, 3).Value
+        InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
+        OutMail.Attachments.Add (InvoiceAttachment)
+Next n
+
+'wyczyszczenie arkusza temp
+Sheets("temp").Range("A:Q").Delete
+
 On Error GoTo 0
 
 With Application
@@ -221,13 +214,11 @@ End With
 Set OutMail = Nothing
 Set OutApp = Nothing
 
-'wyczyszczenie arkusza temp
-Sheets("temp").Range("A:Q").Delete
-
 End Sub
 
 
 Function RangetoHTML(rng As Range)
+
 ' By Ron de Bruin.
     Dim fso As Object
     Dim ts As Object
@@ -282,8 +273,8 @@ Function RangetoHTML(rng As Range)
 End Function
 
 
-
 Function GetBoiler(ByVal sFile As String) As String
+
 'Dick Kusleika
     Dim fso As Object
     Dim ts As Object
