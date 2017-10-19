@@ -17,6 +17,8 @@ Dim InvoiceAttachment As String
 Dim n As Integer
 Dim rng2 As Range
 
+Dim SingleEmail As Integer
+
 Dim MessageText As String
 
 'Tekst wiadomosci
@@ -157,8 +159,10 @@ Set rng = Nothing
 Answer = MsgBox("Send ech one separately?", vbYesNo)
 If Answer = vbYes Then
     Set rng = Sheets("temp").Range("A1:K2")
+    SingleEmail = 1
 Else
-    Set rng = Sheets("temp").Range("A1:K300").SpecialCells(xlCellTypeConstants)
+    Set rng = Sheets("temp").Range("A1:K30").SpecialCells(xlCellTypeConstants)
+    SingleEmail = 0
 End If
 
 'Przygotowanie maila.
@@ -193,13 +197,21 @@ End With
 
 'InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + Sheets("temp").Range("C2").Value + ".pdf"
 
-Set rng2 = Sheets("temp").Range("C2:C30").SpecialCells(xlCellTypeConstants)
+If SingleEmail = 1 Then
 
-For n = 2 To 30
-        InvoiceNumber = Sheets("temp").Cells(n, 3).Value
-        InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
-        OutMail.Attachments.Add (InvoiceAttachment)
-Next n
+            InvoiceNumber = Sheets("temp").Cells(2, 3).Value
+            InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
+            OutMail.Attachments.Add (InvoiceAttachment)
+
+Else
+
+    For n = 2 To 30
+            InvoiceNumber = Sheets("temp").Cells(n, 3).Value
+            InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
+            OutMail.Attachments.Add (InvoiceAttachment)
+    Next n
+
+End If
 
 'wyczyszczenie arkusza temp
 Sheets("temp").Range("A:Q").Delete
