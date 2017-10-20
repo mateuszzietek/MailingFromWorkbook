@@ -27,6 +27,12 @@ Dim PONumber As String
 Dim PONumberDir As String
 Dim m As Integer
 
+Dim Msg As String
+Dim ReqNumber As String
+Dim MsgFile As String
+Dim MsgAttachmentDir As String
+Dim MsgAttachment As String
+
 'Tekst wiadomosci
 MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
@@ -252,11 +258,51 @@ Else
             
             OutMail.Attachments.Add (POAttachment)
             
-            If PONumber < 0 Then Exit For
             
     Next m
 
 End If
+
+
+'MSG
+
+If SingleEmail = 1 Then
+
+            Msg = "Invoice #"
+
+            ReqNumber = Sheets("temp").Cells(2, 1).Value
+            
+            MsgFile = Msg + ReqNumber
+            
+            MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" & MsgFile & "*.msg")
+            
+            MsgAttachment = "G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" + MsgAttachmentDir
+            
+            OutMail.Attachments.Add (MsgAttachment)
+
+Else
+
+    For m = 2 To 30
+    
+            Msg = "Invoice #"
+
+            ReqNumber = Sheets("temp").Cells(m, 1).Value
+            
+            MsgFile = Msg + ReqNumber
+            
+            If ReqNumber = "" Then Exit For
+            
+            MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" & MsgFile & "*.msg")
+            
+            MsgAttachment = "G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" + MsgAttachmentDir
+            
+            OutMail.Attachments.Add (MsgAttachment)
+            
+            
+    Next m
+
+End If
+
 
 'wyczyszczenie arkusza temp
 Sheets("temp").Range("A:Q").Delete
