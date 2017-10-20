@@ -6,6 +6,8 @@ Dim rng As Range
 Dim OutApp As Object
 Dim OutMail As Object
 
+Dim MessageText As String
+
 Dim BU As String
 Dim BUmail As String
 
@@ -19,7 +21,11 @@ Dim rng2 As Range
 
 Dim SingleEmail As Integer
 
-Dim MessageText As String
+Dim PO As String
+Dim PoPdf As String
+Dim PONumber As String
+Dim PONumberDir As String
+Dim m As Integer
 
 'Tekst wiadomosci
 MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
@@ -193,7 +199,9 @@ With OutMail
     .Display
 End With
 
-'ZALACZNIKI
+'ZALACZNIKI>>>
+
+'INV
 
 'InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + Sheets("temp").Range("C2").Value + ".pdf"
 
@@ -213,10 +221,47 @@ Else
 
 End If
 
+On Error GoTo 0
+
+'PO
+If SingleEmail = 1 Then
+
+            PONumber = "PO " & Sheets("temp").Cells(2, 2).Value
+            
+            PONumberDir = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PONumber & "*.pdf")
+            
+            POAttachment = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDir
+            
+            OutMail.Attachments.Add (POAttachment)
+
+Else
+
+    For m = 2 To 30
+    
+            PO = "PO "
+
+            PONumber = Sheets("temp").Cells(m, 2).Value
+            
+            PoPdf = PO + PONumber
+            
+            If PONumber = "" Then Exit For
+            
+            PONumberDir = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PoPdf & "*.pdf")
+            
+            POAttachment = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDir
+            
+            OutMail.Attachments.Add (POAttachment)
+            
+            If PONumber < 0 Then Exit For
+            
+    Next m
+
+End If
+
 'wyczyszczenie arkusza temp
 Sheets("temp").Range("A:Q").Delete
 
-On Error GoTo 0
+
 
 With Application
     .EnableEvents = True
@@ -225,6 +270,7 @@ End With
 
 Set OutMail = Nothing
 Set OutApp = Nothing
+
 
 End Sub
 
