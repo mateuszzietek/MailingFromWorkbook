@@ -143,7 +143,7 @@ Workbooks("APFA.xlsm").Worksheets("AP").Range("A" & LastRowAP & ":K" & LastRowAP
 
 'Wklej do FA
 Worksheets("FA UPLOAD").Range("A:J").SpecialCells(xlCellTypeConstants).Copy
-Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowAP & ":K" & LastRowAP).PasteSpecial xlPasteValues
+Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowFA & ":J" & LastRowFA).PasteSpecial xlPasteValues
 
 
 On Error GoTo 0
