@@ -9,17 +9,21 @@ Dim SigString As String
 Dim Signature As String
 
 Dim TodayValue As String
-TodayValue = Sheets("FA").Range("Q1").Value
+TodayValue = Sheets("FA").Range("O2").Value
 
 Dim MessageText As String
 MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
-'Dim InvAttachment As String
-'InvAttachment = Sheets("temp").Range("C2").Value
-
 'COPY TO TEMP SHEET & AUTOFIT
-Sheets("FA").Range("A1:J300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
+Sheets("FA").Range("A2:J300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
 Sheets("temp").Range("A1:J300").Columns.AutoFit
+
+Dim ReqNum
+ReqNum = Sheets("temp").Range("A2").Value
+
+Dim InvAttachment As String
+InvAttachment = Sheets("temp").Range("C2").Value
+
 
 'SIGNATURE
 SigString = Environ("appdata") & "\Microsoft\Signatures\EUMarketing.htm"
@@ -56,14 +60,16 @@ End With
 Set OutApp = CreateObject("Outlook.Application")
 Set OutMail = OutApp.CreateItem(0)
 
+On Error Resume Next
+
 With OutMail
     .To = "APInvoiceNLHQstaples@Staples.com; supportoffice-ap@staples.com"
     .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
-    .Subject = "Processed Marketing Invoice " + TodayValue
+    .Subject = "Processed Marketing Invoice " + TodayValue + " (" + ReqNum + ")"
     .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
     .SentOnBehalfOfName = "EUMarketingP2P@Staples-Solutions.com"
-    '.Attachments.Add ("G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvAttachment + ".pdf")
+    .Attachments.Add ("G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvAttachment + ".pdf")
     .Display
     
 End With
