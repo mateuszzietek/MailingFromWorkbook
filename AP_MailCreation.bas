@@ -1,6 +1,6 @@
 Attribute VB_Name = "AP_MailCreation"
-Sub Mail_Selection_Range_Outlook_Body()
-Attribute Mail_Selection_Range_Outlook_Body.VB_ProcData.VB_Invoke_Func = "S\n14"
+Sub MessageAP()
+Attribute MessageAP.VB_ProcData.VB_Invoke_Func = " \n14"
 
 Dim rng As Range
 Dim OutApp As Object
@@ -25,6 +25,12 @@ Dim PO As String
 Dim PoPdf As String
 Dim PONumber As String
 Dim PONumberDir As String
+
+Dim POA As String
+Dim PoPdfA As String
+Dim PONumberA As String
+Dim PONumberDirA As String
+
 Dim m As Integer
 
 Dim Msg As String
@@ -37,8 +43,8 @@ Dim MsgAttachment As String
 MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
 'EXPORT TO TEMP SHEET
-Sheets("AP").Range("A1:K300").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
-Sheets("temp").Range("A1:K300").Columns.AutoFit
+Sheets("AP").Range("A2:K500").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
+Sheets("temp").Range("A1:K500").Columns.AutoFit
 
 'SET BU VARIABLE
 BU = Sheets("temp").Range("I2").Value
@@ -137,7 +143,7 @@ If Answer = vbYes Then
     Set rng = Sheets("temp").Range("A1:K2")
     SingleEmail = 1
 Else
-    Set rng = Sheets("temp").Range("A1:K30").SpecialCells(xlCellTypeConstants)
+    Set rng = Sheets("temp").Range("A1:K500").SpecialCells(xlCellTypeConstants)
     SingleEmail = 0
 End If
 
@@ -187,8 +193,6 @@ Else
 
 End If
 
-On Error GoTo 0
-
 'PO:
 If SingleEmail = 1 Then
 
@@ -216,6 +220,36 @@ Next m
 
 End If
 
+''PO AMENDED:
+'If SingleEmail = 1 Then
+'
+'    PONumberA = "PO " & Sheets("temp").Cells(2, 2).Value
+'    PONumberDirA = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PONumberA & "*.pdf")
+'    POAttachmentA = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDirA
+'    OutMail.Attachments.Add (POAttachmentA)
+'
+'Else
+'
+'For m = 2 To 30
+'
+'    POA = "Amended PO "
+'    PONumberA = Sheets("temp").Cells(m, 2).Value
+'    PoPdfA = POA + PONumberA
+'
+'    If PONumberA = "" Then Exit For
+'
+'    PONumberDirA = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PoPdfA & "*.pdf")
+'    POAttachmentA = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDirA
+'
+'    OutMail.Attachments.Add (POAttachmentA)
+'
+'Next m
+'
+'End If
+
+On Error GoTo 0
+
+On Error GoTo REMINDER
 
 'MSG:
 If SingleEmail = 1 Then
@@ -223,8 +257,8 @@ If SingleEmail = 1 Then
 Msg = "Invoice #"
 ReqNumber = Sheets("temp").Cells(2, 1).Value
 MsgFile = Msg + ReqNumber
-MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" & MsgFile & "*.msg")
-MsgAttachment = "G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" + MsgAttachmentDir
+MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
+MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
             
     OutMail.Attachments.Add (MsgAttachment)
 
@@ -236,14 +270,36 @@ Else
         ReqNumber = Sheets("temp").Cells(m, 1).Value
         MsgFile = Msg + ReqNumber
     If ReqNumber = "" Then Exit For
-        MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" & MsgFile & "*.msg")
-        MsgAttachment = "G:\PTP Marketing\01. Operations\01. AP upload\Approvals\" + MsgAttachmentDir
+        MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
+        MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
             
         OutMail.Attachments.Add (MsgAttachment)
                   
     Next m
 
 End If
+
+
+
+'CLEAR TEMP SHEET
+Sheets("temp").Range("A:Q").Delete
+
+
+With Application
+    .EnableEvents = True
+    .ScreenUpdating = True
+End With
+
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+Exit Sub
+
+
+REMINDER:
+
+MsgBox ("UPDATE APPROVAL FOLDER FIRST!")
 
 'CLEAR TEMP SHEET
 Sheets("temp").Range("A:Q").Delete
