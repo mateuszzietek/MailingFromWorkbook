@@ -15,6 +15,7 @@ Dim FA As Range
 Dim CounterFa As Integer
 Dim LastRowAP As String
 Dim LastRowFA As String
+Dim InvoiceData As Workbook
 
 'GET USER CONFIRMATION
 Answer = MsgBox("Do you want to extract data for AP/FA Upload?", vbYesNo)
@@ -22,6 +23,8 @@ Answer = MsgBox("Do you want to extract data for AP/FA Upload?", vbYesNo)
         ExternalFile = Application.GetOpenFilename(FileFilter:="Wszystkie pliki (*.*),*.*", Title:="INVOICE DATA")
                                 
         Workbooks.Open ExternalFile
+        
+        Set InvoiceData = ActiveWorkbook
     
 'CLEAR FILTERS
 If ActiveWorkbook.Worksheets("DataTables").FilterMode = True _
@@ -139,6 +142,16 @@ Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowFA & ":J" & LastRowFA
 Else
 End If
 
+'COPY DATA SHEET TO THIS WORKBOOK
+Application.DisplayAlerts = False
+
+Workbooks("APFA.xlsm").Worksheets("DataTables").Delete
+InvoiceData.Worksheets("DataTables").Copy After:=Workbooks("APFA.xlsm").Worksheets("temp")
+
+Application.DisplayAlerts = True
+
+Worksheets("AP").Activate
+
 On Error GoTo 0
 
     Else
@@ -146,6 +159,8 @@ On Error GoTo 0
     MsgBox ("Task aborted!")
     
     End If
+    
+Application.ScreenUpdating = True
 
 End Sub
 
