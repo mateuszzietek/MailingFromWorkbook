@@ -152,6 +152,10 @@ Application.DisplayAlerts = True
 
 Worksheets("AP").Activate
 
+'CHECKING FORMULA
+Worksheets("AP").Range("Q3:Q500").FormulaLocal = "=COUNTIF(DataTables!C:C;AP!C3)"
+Worksheets("FA").Range("P3:P300").FormulaLocal = "=COUNTIF(DataTables!C:C;AP!C3)"
+
 On Error GoTo 0
 
     Else
