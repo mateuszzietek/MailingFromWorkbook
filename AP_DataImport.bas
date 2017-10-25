@@ -131,8 +131,13 @@ LastRowFA = Workbooks("APFA.xlsm").Worksheets("FA").Cells(Rows.Count, "A").End(x
 Worksheets("AP UPLOAD").Range("A:K").SpecialCells(xlCellTypeConstants).Copy
 Workbooks("APFA.xlsm").Worksheets("AP").Range("A" & LastRowAP & ":K" & LastRowAP).PasteSpecial xlPasteValues
 
+If Worksheets("FA UPLOAD").Range("A1") > 0 Then
+
 Worksheets("FA UPLOAD").Range("A:J").SpecialCells(xlCellTypeConstants).Copy
 Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowFA & ":J" & LastRowFA).PasteSpecial xlPasteValues
+
+Else
+End If
 
 On Error GoTo 0
 
