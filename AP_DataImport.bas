@@ -27,6 +27,12 @@ Answer = MsgBox("Do you want to extract data for AP/FA Upload?", vbYesNo)
         Set InvoiceData = ActiveWorkbook
     
 'CLEAR FILTERS
+If Workbooks("APFA.xlsm").Worksheets("AP").FilterMode = True _
+    Then Workbooks("APFA.xlsm").Worksheets("AP").ShowAllData
+    
+If Workbooks("APFA.xlsm").Worksheets("FA").FilterMode = True _
+    Then Workbooks("APFA.xlsm").Worksheets("FA").ShowAllData
+
 If ActiveWorkbook.Worksheets("DataTables").FilterMode = True _
     Then Worksheets("DataTables").ShowAllData
 
