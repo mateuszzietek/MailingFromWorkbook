@@ -139,21 +139,20 @@ SigString = Environ("appdata") & "\Microsoft\Signatures\EUMarketing.htm"
 Set rng = Nothing
 
 Answer = MsgBox("Send ech one separately?", vbYesNo)
+
 If Answer = vbYes Then
+
     Set rng = Sheets("temp").Range("A1:K2")
     SingleEmail = 1
+    
 Else
+
     Set rng = Sheets("temp").Range("A1:K500").SpecialCells(xlCellTypeConstants)
     SingleEmail = 0
+    
 End If
 
 'EMAIL
-If rng Is Nothing Then
-    MsgBox "The selection is not a range or the sheet is protected. " & _
-           vbNewLine & "Please correct and try again.", vbOKOnly
-    Exit Sub
-End If
-
 With Application
     .EnableEvents = False
     .ScreenUpdating = False
@@ -203,20 +202,20 @@ If SingleEmail = 1 Then
         
 Else
 
-For m = 2 To 30
-    
-    PO = "PO "
-    PONumber = Sheets("temp").Cells(m, 2).Value
-    PoPdf = PO + PONumber
-            
-    If PONumber = "" Then Exit For
-            
-    PONumberDir = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PoPdf & "*.pdf")
-    POAttachment = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDir
-            
-    OutMail.Attachments.Add (POAttachment)
-             
-Next m
+    For m = 2 To 30
+        
+        PO = "PO "
+        PONumber = Sheets("temp").Cells(m, 2).Value
+        PoPdf = PO + PONumber
+                
+        If PONumber = "" Then Exit For
+                
+        PONumberDir = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PoPdf & "*.pdf")
+        POAttachment = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDir
+                
+        OutMail.Attachments.Add (POAttachment)
+                 
+    Next m
 
 End If
 
@@ -254,12 +253,11 @@ On Error GoTo REMINDER
 'MSG:
 If SingleEmail = 1 Then
 
-Msg = "Invoice #"
-ReqNumber = Sheets("temp").Cells(2, 1).Value
-MsgFile = Msg + ReqNumber
-MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
-MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
-            
+    Msg = "Invoice #"
+    ReqNumber = Sheets("temp").Cells(2, 1).Value
+    MsgFile = Msg + ReqNumber
+    MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
+    MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
     OutMail.Attachments.Add (MsgAttachment)
 
 Else
@@ -269,7 +267,9 @@ Else
         Msg = "Invoice #"
         ReqNumber = Sheets("temp").Cells(m, 1).Value
         MsgFile = Msg + ReqNumber
+        
     If ReqNumber = "" Then Exit For
+    
         MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
         MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
             
@@ -293,25 +293,24 @@ End With
 Set OutMail = Nothing
 Set OutApp = Nothing
 
-
 Exit Sub
 
 
 REMINDER:
 
-MsgBox ("UPDATE APPROVAL FOLDER FIRST!")
-
-'CLEAR TEMP SHEET
-Sheets("temp").Range("A:Q").Delete
-
-
-With Application
-    .EnableEvents = True
-    .ScreenUpdating = True
-End With
-
-Set OutMail = Nothing
-Set OutApp = Nothing
+    MsgBox ("UPDATE APPROVAL FOLDER FIRST!")
+    
+    'CLEAR TEMP SHEET
+    Sheets("temp").Range("A:Q").Delete
+    
+    
+    With Application
+        .EnableEvents = True
+        .ScreenUpdating = True
+    End With
+    
+    Set OutMail = Nothing
+    Set OutApp = Nothing
 
 
 End Sub

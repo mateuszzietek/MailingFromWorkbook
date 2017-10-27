@@ -117,11 +117,17 @@ End With
 
 'CLEAN UP IN COLUMN J
 For Each FA In Worksheets("FA Upload").Range("J1:J100")
+
     CounterFa = InStr(1, FA, " ")
+    
         If CounterFa > 0 Then
-        FA.Value = Left(FA.Value, InStr(1, FA.Value, " "))
+            
+            FA.Value = Left(FA.Value, InStr(1, FA.Value, " "))
+            
         End If
+        
     FA.Replace What:="1•", Replacement:="", SearchOrder:=xlByColumns
+    
 Next FA
 
 'AUTOFIT
@@ -142,10 +148,11 @@ Workbooks("APFA.xlsm").Worksheets("AP").Range("A" & LastRowAP & ":K" & LastRowAP
 
 If Worksheets("FA UPLOAD").Range("A1") > 0 Then
 
-Worksheets("FA UPLOAD").Range("A:J").SpecialCells(xlCellTypeConstants).Copy
-Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowFA & ":J" & LastRowFA).PasteSpecial xlPasteValues
+    Worksheets("FA UPLOAD").Range("A:J").SpecialCells(xlCellTypeConstants).Copy
+    Workbooks("APFA.xlsm").Worksheets("FA").Range("A" & LastRowFA & ":J" & LastRowFA).PasteSpecial xlPasteValues
 
 Else
+
 End If
 
 'COPY DATA SHEET TO THIS WORKBOOK
@@ -166,7 +173,7 @@ On Error GoTo 0
 
     Else
     
-    MsgBox ("Task aborted!")
+        MsgBox ("Task aborted!")
     
     End If
     
