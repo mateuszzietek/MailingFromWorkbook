@@ -183,6 +183,9 @@ End With
 'ATTACHMENTS
 
 'INV:
+
+'-----------------CONDITION FOR UK START--------------------
+
 If InvoiceFolder = "07. UK Invoices" Then
 
                     InvoiceNumber = Sheets("temp").Cells(2, 3).Value
@@ -194,6 +197,7 @@ If InvoiceFolder = "07. UK Invoices" Then
 
 Else
 
+'-----------------CONDITION FOR UK END--------------------
 If SingleEmail = 1 Then
 
             InvoiceNumber = Sheets("temp").Cells(2, 3).Value
