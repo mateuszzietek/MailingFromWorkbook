@@ -39,6 +39,12 @@ Dim MsgFile As String
 Dim MsgAttachmentDir As String
 Dim MsgAttachment As String
 
+Dim InvoiceFolder As String
+InvoiceFolder = Worksheets("AP").Range("I1").Value
+
+Dim Singlemail As String
+Singlemail = ""
+
 'EMAIL TEXT
 MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
@@ -144,6 +150,7 @@ If Answer = vbYes Then
 
     Set rng = Sheets("temp").Range("A1:K2")
     SingleEmail = 1
+    SingleEmailReq = " (" + Sheets("temp").Range("A2").Value + ")"
     
 Else
 
@@ -167,7 +174,7 @@ With OutMail
     .To = BUmail
     .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
-    .Subject = "AP Marketing Invoice " + BU
+    .Subject = "AP Marketing Invoice " + BU + SingleEmailReq
     .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
     .SentOnBehalfOfName = "EUMarketingP2P@Staples-Solutions.com"
     .Display
@@ -179,7 +186,7 @@ End With
 If SingleEmail = 1 Then
 
             InvoiceNumber = Sheets("temp").Cells(2, 3).Value
-            InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
+            InvoiceAttachment = "G:\PTP Marketing\01. Operations\" + InvoiceFolder + "\" + InvoiceNumber + ".pdf"
             OutMail.Attachments.Add (InvoiceAttachment)
 
 Else
