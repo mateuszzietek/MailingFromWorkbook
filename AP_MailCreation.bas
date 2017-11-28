@@ -42,7 +42,7 @@ Dim MsgAttachment As String
 Dim InvoiceFolder As String
 InvoiceFolder = Worksheets("AP").Range("I1").Value
 
-Dim Singlemail As String
+Dim Singlemail, SinglemailReq As String
 Singlemail = ""
 
 'EMAIL TEXT
@@ -183,6 +183,17 @@ End With
 'ATTACHMENTS
 
 'INV:
+If InvoiceFolder = "07. UK Invoices" Then
+
+                    InvoiceNumber = Sheets("temp").Cells(2, 3).Value
+                    InvoiceAttachment = "G:\PTP Marketing\01. Operations\" + InvoiceFolder + "\" + InvoiceNumber + ".pdf"
+                    OutMail.Attachments.Add (InvoiceAttachment)
+                    
+                    Call ClearTempSheet
+                    Exit Sub
+
+Else
+
 If SingleEmail = 1 Then
 
             InvoiceNumber = Sheets("temp").Cells(2, 3).Value
@@ -285,40 +296,17 @@ Else
     Next m
 
 End If
-
-
+End If
 
 'CLEAR TEMP SHEET
-Sheets("temp").Range("A:Q").Delete
-
-
-With Application
-    .EnableEvents = True
-    .ScreenUpdating = True
-End With
-
-Set OutMail = Nothing
-Set OutApp = Nothing
+Call ClearTempSheet
 
 Exit Sub
 
-
+'ERROR HANDLER
 REMINDER:
-
-    MsgBox ("UPDATE APPROVAL FOLDER FIRST!")
-    
-    'CLEAR TEMP SHEET
-    Sheets("temp").Range("A:Q").Delete
-    
-    
-    With Application
-        .EnableEvents = True
-        .ScreenUpdating = True
-    End With
-    
-    Set OutMail = Nothing
-    Set OutApp = Nothing
-
+MsgBox ("UPDATE APPROVAL FOLDER FIRST!")
+Call ClearTempSheet
 
 End Sub
 
