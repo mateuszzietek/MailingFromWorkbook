@@ -8,9 +8,6 @@ Dim OutMail As Object
 Dim SigString As String
 Dim Signature As String
 
-Dim TodayValue As String
-TodayValue = Sheets("FA").Range("O2").Value
-
 Dim MessageText As String
 MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoice. <u><b>Please inform us when the invoice gets <font color=#3399ff>booked</font> on Your side.</b></u><br> <br></font>"
 
@@ -66,7 +63,7 @@ With OutMail
     .To = "APInvoiceNLHQstaples@Staples.com; supportoffice-ap@staples.com"
     .CC = "EUMarketingP2P@Staples-Solutions.com"
     .BCC = ""
-    .Subject = "Processed Marketing Invoice " + TodayValue + " (" + ReqNum + ")"
+    .Subject = "Processed Marketing Invoice " + Format(Now, "dd/mm/yyyy") + " (" + ReqNum + ")"
     .HTMLBody = MessageText + RangetoHTML(rng) + "<br> <br>" + Signature
     .SentOnBehalfOfName = "EUMarketingP2P@Staples-Solutions.com"
     .Attachments.Add ("G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvAttachment + ".pdf")

@@ -18,7 +18,7 @@ Dim LastRowFA As String
 Dim InvoiceData As Workbook
 
 'GET USER CONFIRMATION
-Answer = MsgBox("Do you want to extract data for AP/FA Upload?", vbYesNo)
+Answer = MsgBox("Extract data for AP/FA Upload?", vbYesNo)
     If Answer = vbYes Then
         ExternalFile = Application.GetOpenFilename(FileFilter:="Wszystkie pliki (*.*),*.*", Title:="INVOICE DATA")
                                 
@@ -63,11 +63,6 @@ For Each Cost In Worksheets("AP Upload").Range("K1:K100")
         End If
     Cost.Replace What:="1•", Replacement:="", SearchOrder:=xlByColumns
 Next Cost
-
-''CLEAN UP IN COLUMN J
-'Application.ActiveWorkbook.Worksheets("AP Upload").Columns("J").Replace _
-'What:="1•", Replacement:=")", _
-'SearchOrder:=xlByColumns
  
 'AUTOFIT COLUMNS
 Application.ActiveWorkbook.Worksheets("AP Upload").Columns("A:I").AutoFit
@@ -158,16 +153,22 @@ End If
 'COPY DATA SHEET TO THIS WORKBOOK
 Application.DisplayAlerts = False
 
-Workbooks("APFA.xlsm").Worksheets("DataTables").Delete
-InvoiceData.Worksheets("DataTables").Copy After:=Workbooks("APFA.xlsm").Worksheets("temp")
+Workbooks("APFA.xlsm").Worksheets("DataTables").Columns("A:R").Clear
+InvoiceData.Worksheets("DataTables").Columns("A:R").Copy Destination:=Workbooks("APFA.xlsm").Worksheets("DataTables").Range("A:R")
+
+Workbooks("APFA.xlsm").Worksheets("Germany").Columns("A:P").Clear
+InvoiceData.Worksheets("GERMANY").Columns("A:P").Copy Destination:=Workbooks("APFA.xlsm").Worksheets("Germany").Range("A:P")
+
+If Workbooks("APFA.xlsm").Worksheets("Germany").Range("A2").Value <> "" Then
+MsgBox ("Invoices for DE Units.")
+Else
+End If
+
+InvoiceData.Close
 
 Application.DisplayAlerts = True
 
-Worksheets("AP").Activate
-
-'CHECKING FORMULA
-Worksheets("AP").Range("Q3:Q500").FormulaLocal = "=COUNTIF(DataTables!C:C;AP!C3)"
-Worksheets("FA").Range("P3:P300").FormulaLocal = "=COUNTIF(DataTables!C:C;AP!C3)"
+Workbooks("APFA.xlsm").Worksheets("AP").Activate
 
 On Error GoTo 0
 
@@ -179,6 +180,41 @@ On Error GoTo 0
     
 Application.ScreenUpdating = True
 
+End Sub
+
+
+
+
+Public Sub GetPO()
+
+Application.ScreenUpdating = False
+    
+Dim ExternalFile As String
+Dim Answer As Integer
+Dim TrakerPO As Workbook
+
+'GET USER CONFIRMATION
+Answer = MsgBox("Update PO data?", vbYesNo)
+    If Answer = vbYes Then
+        ExternalFile = Application.GetOpenFilename(FileFilter:="Wszystkie pliki (*.*),*.*", Title:="PO TRACKER")
+                                
+        Workbooks.Open ExternalFile
+        
+        Set TrakerPO = ActiveWorkbook
+        
+'UPDATE DATA
+Application.DisplayAlerts = False
+
+Workbooks("APFA.xlsm").Worksheets("PO Tracker").Columns("A:R").Clear
+TrakerPO.Worksheets("DataTables").Columns("A:R").Copy Destination:=Workbooks("APFA.xlsm").Worksheets("PO Tracker").Range("A:R")
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+
+TrakerPO.Close
+
+Else
+End If
 End Sub
 
 
