@@ -50,7 +50,7 @@ MessageText = "<font face=Arial>Hi Team, <br> <br> Please process attached invoi
 
 'EXPORT TO TEMP SHEET
 Sheets("AP").Range("A2:K500").SpecialCells(xlCellTypeConstants).Copy Destination:=Sheets("temp").Range("A1")
-Sheets("temp").Range("A1:K500").Columns.AutoFit
+Sheets("temp").Columns.AutoFit
 
 'SET BU VARIABLE
 BU = Sheets("temp").Range("I2").Value
@@ -133,7 +133,7 @@ Select Case BU
 End Select
 
 'SIGNATURE
-SigString = Environ("appdata") & "\Microsoft\Signatures\EUMarketing.htm"
+SigString = Environ("appdata") & "\Microsoft\Signatures\AP.htm"
 
     If Dir(SigString) <> "" Then
         Signature = GetBoiler(SigString)
@@ -186,10 +186,10 @@ End With
 
 '-----------------CONDITION FOR UK START--------------------
 
-If InvoiceFolder = "07. UK Invoices" Then
+If Sheets("temp").Range("I2").Value = "UK - Staples UK Online Limited" Or Sheets("temp").Range("I2").Value = "UK - Staples UK Adv Limited" Then
 
                     InvoiceNumber = Sheets("temp").Cells(2, 3).Value
-                    InvoiceAttachment = "G:\PTP Marketing\01. Operations\" + InvoiceFolder + "\" + InvoiceNumber + ".pdf"
+                    InvoiceAttachment = "G:\PTP Marketing\01. Operations\08. UK Invoices\" + InvoiceNumber + ".pdf"
                     OutMail.Attachments.Add (InvoiceAttachment)
                     
                     Call ClearTempSheet
@@ -198,19 +198,21 @@ If InvoiceFolder = "07. UK Invoices" Then
 Else
 
 '-----------------CONDITION FOR UK END--------------------
-If SingleEmail = 1 Then
+    
+        If SingleEmail = 1 Then
+        
+                    InvoiceNumber = Sheets("temp").Cells(2, 3).Value
+                    InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
+                    OutMail.Attachments.Add (InvoiceAttachment)
+        
+        Else
+        
+            For n = 2 To 30
+                    InvoiceNumber = Sheets("temp").Cells(n, 3).Value
+                    InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
+                    OutMail.Attachments.Add (InvoiceAttachment)
+            Next n
 
-            InvoiceNumber = Sheets("temp").Cells(2, 3).Value
-            InvoiceAttachment = "G:\PTP Marketing\01. Operations\" + InvoiceFolder + "\" + InvoiceNumber + ".pdf"
-            OutMail.Attachments.Add (InvoiceAttachment)
-
-Else
-
-    For n = 2 To 30
-            InvoiceNumber = Sheets("temp").Cells(n, 3).Value
-            InvoiceAttachment = "G:\PTP Marketing\01. Operations\03. Europe Marketing Invoices\" + InvoiceNumber + ".pdf"
-            OutMail.Attachments.Add (InvoiceAttachment)
-    Next n
 
 End If
 
@@ -218,9 +220,14 @@ End If
 If SingleEmail = 1 Then
 
     PONumber = "PO " & Sheets("temp").Cells(2, 2).Value
+    
     PONumberDir = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PONumber & "*.pdf")
     POAttachment = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDir
     OutMail.Attachments.Add (POAttachment)
+    
+'    PONumberDir2018 = Dir("G:\PTP Marketing\01. Operations\06. Finalised PO Folder FY 2018\" & PONumber & "*.pdf")
+'    POAttachment2018 = "G:\PTP Marketing\01. Operations\06. Finalised PO Folder FY 2018\" + PONumberDir2018
+'    OutMail.Attachments.Add (POAttachment2018)
         
 Else
 
@@ -241,34 +248,9 @@ Else
 
 End If
 
-''PO AMENDED:
-'If SingleEmail = 1 Then
-'
-'    PONumberA = "PO " & Sheets("temp").Cells(2, 2).Value
-'    PONumberDirA = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PONumberA & "*.pdf")
-'    POAttachmentA = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDirA
-'    OutMail.Attachments.Add (POAttachmentA)
-'
-'Else
-'
-'For m = 2 To 30
-'
-'    POA = "Amended PO "
-'    PONumberA = Sheets("temp").Cells(m, 2).Value
-'    PoPdfA = POA + PONumberA
-'
-'    If PONumberA = "" Then Exit For
-'
-'    PONumberDirA = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PoPdfA & "*.pdf")
-'    POAttachmentA = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDirA
-'
-'    OutMail.Attachments.Add (POAttachmentA)
-'
-'Next m
-'
-'End If
 
 On Error GoTo 0
+
 
 On Error GoTo REMINDER
 
@@ -278,8 +260,8 @@ If SingleEmail = 1 Then
     Msg = "Invoice #"
     ReqNumber = Sheets("temp").Cells(2, 1).Value
     MsgFile = Msg + ReqNumber
-    MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
-    MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
+    MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\07. Approvals\" & MsgFile & "*.msg")
+    MsgAttachment = "G:\PTP Marketing\01. Operations\07. Approvals\" + MsgAttachmentDir
     OutMail.Attachments.Add (MsgAttachment)
 
 Else
@@ -292,8 +274,8 @@ Else
         
     If ReqNumber = "" Then Exit For
     
-        MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\06. Approvals\" & MsgFile & "*.msg")
-        MsgAttachment = "G:\PTP Marketing\01. Operations\06. Approvals\" + MsgAttachmentDir
+        MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\07. Approvals\" & MsgFile & "*.msg")
+        MsgAttachment = "G:\PTP Marketing\01. Operations\07. Approvals\" + MsgAttachmentDir
             
         OutMail.Attachments.Add (MsgAttachment)
                   
