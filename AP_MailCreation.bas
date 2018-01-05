@@ -26,10 +26,9 @@ Dim PoPdf As String
 Dim PONumber As String
 Dim PONumberDir As String
 
-Dim POA As String
-Dim PoPdfA As String
-Dim PONumberA As String
-Dim PONumberDirA As String
+'Dim PONumber2018
+'Dim PoPdf2018 As String
+'Dim PONumberDir2018 As String
 
 Dim m As Integer
 
@@ -241,8 +240,13 @@ Else
                 
         PONumberDir = Dir("G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" & PoPdf & "*.pdf")
         POAttachment = "G:\PTP Marketing\01. Operations\05. Finalised PO Folder FY 2017\" + PONumberDir
-                
         OutMail.Attachments.Add (POAttachment)
+        
+        
+'        PONumberDir2018 = Dir("G:\PTP Marketing\01. Operations\06. Finalised PO Folder FY 2018\" & PoPdf & "*.pdf")
+'        POAttachment2018 = "G:\PTP Marketing\01. Operations\06. Finalised PO Folder FY 2018\" + PONumberDir2018
+'        OutMail.Attachments.Add (POAttachment2018)
+                 
                  
     Next m
 
@@ -276,8 +280,8 @@ Else
     
         MsgAttachmentDir = Dir("G:\PTP Marketing\01. Operations\07. Approvals\" & MsgFile & "*.msg")
         MsgAttachment = "G:\PTP Marketing\01. Operations\07. Approvals\" + MsgAttachmentDir
-            
         OutMail.Attachments.Add (MsgAttachment)
+        
                   
     Next m
 
